@@ -1,0 +1,68 @@
+def arithmetic_arranger(problems, showanswers=False):
+  list2 = []
+  firstlinefixed = ""
+  secondlinefixed = ""
+  thirdlinefixed = ""
+  answersfixed = ""
+  colspace = "    "
+  answers = []
+  firstline = []
+  secondline = []
+  thirdline = []
+  numberofproblems = len(problems)
+  if numberofproblems > 5:
+      return "Erorr: Too many problems."
+  for problem in problems:
+    problem = problem.strip("\" \'")
+    list2.append(problem.split(" "))
+  for x in range(0, numberofproblems):
+    try:
+        if list2[x][1] == "+":
+          answers.append(str(int(list2[x][0]) + int(list2[x][2])))
+        elif list2[x][1] == "-":
+          answers.append(str(int(list2[x][0]) - int(list2[x][2])))
+        else:
+            return "Error: Operator must be '+' or '-'."
+    except:
+        return "Error: Numbers must only contain digits."
+  for x in range(0, numberofproblems):
+    firstline.append(list2[x][0])
+    secondline.append(list2[x][1])
+    secondline.append(list2[x][2])
+  for x in range((numberofproblems - 1), -1, -1):
+    lengthofsecondnumber = len(str(secondline[1 + (2 * x)]))
+    lengthoffirstnumber = len(str(firstline[x]))
+    if lengthofsecondnumber > 4 or lengthoffirstnumber > 4:
+        return "Error: Numbers cannot be more than four digits."
+    elif lengthoffirstnumber >= lengthofsecondnumber:
+      spacer = " " * (lengthoffirstnumber - lengthofsecondnumber + 1)
+      secondline[((x * 2) +
+                  1)] = secondline[x * 2] + spacer + secondline[((x * 2) + 1)]
+      firstline[x] = "  " + firstline[x]
+      lengthofline = lengthoffirstnumber + 2
+      thirdline.insert(0, ("-" * (lengthofline)))
+      secondline.pop(x * 2)
+      answers[x] = (" " * (lengthofline - len(answers[x]))) + answers[x]
+    elif lengthoffirstnumber < lengthofsecondnumber:
+      spacer = " " * (lengthofsecondnumber - lengthoffirstnumber)
+      firstline[x] = "  " + spacer + firstline[x]
+      secondline[((x * 2) +
+                  1)] = secondline[x * 2] + " " + secondline[((x * 2) + 1)]
+      lengthofline = lengthofsecondnumber + 2
+      thirdline.insert(0, ("-" * (lengthofline)))
+      secondline.pop(x * 2)
+      answers[x] = (" " * (lengthofline - len(answers[x]))) + answers[x]
+  for x in range(0, numberofproblems):
+    firstlinefixed += firstline[x]
+    secondlinefixed += secondline[x]
+    thirdlinefixed += thirdline[x]
+    answersfixed += answers[x]
+    if x < numberofproblems - 1:
+      firstlinefixed += colspace
+      secondlinefixed += colspace
+      thirdlinefixed += colspace
+      answersfixed += colspace
+  arranged_problems = firstlinefixed + "\n" + secondlinefixed + "\n" + thirdlinefixed
+  if showanswers == True:
+    arranged_problems += "\n" + answersfixed
+  return arranged_problems
